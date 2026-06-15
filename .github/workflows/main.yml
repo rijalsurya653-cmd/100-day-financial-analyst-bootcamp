@@ -1,0 +1,22 @@
+name: Daily Bootcamp Update
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "$(date) - Daily update" >> log.txt
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add log.txt
+          git commit -m "Daily update $(date +%Y-%m-%d)" || echo ""
+          git push
